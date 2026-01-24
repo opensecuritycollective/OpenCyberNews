@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('news');
+const posts = allPosts
+	.filter(p => p.data.category === 'Noticias')
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const base = "/OpenCyberNews";
+---
+
+<Layout title="Noticias // OpenCyberNews">
+	<header class="mb-12 pb-8 border-b border-cyber-border">
+		<!-- Breadcrumb -->
+		<div class="text-xs text-cyber-muted mb-6 flex items-center gap-2">
+			<a href={`${base}/`} class="text-cyber-dim hover:text-cyber-red transition-colors">INICIO</a>
+			<span class="text-cyber-dark">/</span>
+			<span class="text-cyber-red">NOTICIAS</span>
+		</div>
+		
+		<!-- Title block -->
+		<div class="flex items-start gap-4 mb-4">
+			<div class="w-1 h-16 flex-shrink-0 mt-2" style="background: linear-gradient(180deg, #ff0000 0%, transparent 100%);"></div>
+			<div>
+				<h1 class="text-4xl font-bold text-white tracking-tight m-0">// NOTICIAS</h1>
+				<p class="text-xs text-cyber-dim mt-1">[{posts.length}] registros encontrados en la base de datos</p>
+			</div>
+		</div>
+		
+		<p class="text-cyber-dim text-sm max-w-xl leading-relaxed">
+			Últimas actualizaciones del panorama de ciberseguridad. Vulnerabilidades, 
+			brechas de seguridad y alertas del sector.
+		</p>
+	</header>
+
+	{posts.length > 0 ? (
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{posts.map((post, index) => (
+				<article class="cyber-card opacity-0 animate-fade-in-up" style={`animation-delay: ${index * 0.1}s; animation-fill-mode: forwards;`}>
+					<a href={`${base}/news/${post.slug}`} class="block p-6">
+						<div class="flex justify-between items-center mb-4 text-xs">
+							<span class="text-cyber-red font-bold">#{String(index + 1).padStart(3, '0')}</span>
+							<span class="text-cyber-muted uppercase">{post.data.pubDate.toLocaleDateString('es-ES', { 
+								year: 'numeric', 
+								month: 'short', 
+								day: 'numeric' 
+							})}</span>
+						</div>
+						<h2 class="text-lg font-bold text-white mb-3 leading-snug group-hover:text-cyber-red transition-colors">{post.data.title}</h2>
+						<p class="text-sm text-cyber-dim leading-relaxed mb-6">{post.data.description}</p>
+						<div class="flex justify-between items-center text-xs">
+							<span class="cyber-tag">NOTICIA</span>
+							<span class="text-cyber-red font-bold opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">&gt; LEER_MAS</span>
+						</div>
+					</a>
+				</article>
+			))}
+		</div>
+	) : (
+		<div class="text-center py-20 border border-dashed border-cyber-border bg-cyber-card">
+			<div class="text-5xl mb-4">
+				<span class="text-cyber-dark">[</span>
+				<span class="text-cyber-red">×</span>
+				<span class="text-cyber-dark">]</span>
+			</div>
+			<h2 class="text-cyber-muted text-xl font-bold mb-2">NO_DATA_FOUND</h2>
+			<p class="text-cyber-dark text-sm mb-8">No hay noticias registradas en el sistema actualmente.</p>
+			<a href={`${base}/`} class="text-cyber-red text-sm font-bold hover:text-glow-red transition-all">&lt; VOLVER_AL_INICIO</a>
+		</div>
+	)}
+</Layout>
+
+<style>
+	/* Card hover effect for title */
+	.cyber-card:hover h2 {
+		@apply text-cyber-red;
+	}
+	
+	/* Read more animation */
+	.cyber-card:hover span:last-child {
+		@apply opacity-100 translate-x-0;
+	}
+</style>

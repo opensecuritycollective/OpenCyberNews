@@ -1,0 +1,64 @@
+---
+const base = "/OpenCyberNews";
+---
+
+<div
+  class="bg-cyber-black text-white font-mono leading-relaxed bg-cyber-dots bg-dots
+    min-h-screen flex flex-col"
+>
+  <div
+    class="w-full h-24 z-40 fixed top-0 pointer-events-none animate-scan"
+    style="background: linear-gradient(0deg, transparent 0%, rgba(255,0,0,0.02) 50%, transparent 100%);"
+  >
+  </div>
+
+  <header
+    class="border-b border-cyber-border py-4 bg-black/95 backdrop-blur-sm sticky top-0 z-50"
+  >
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-8">
+      <a href={`${base}/`} class="font-bold text-lg text-white">
+        <span class="logo-dot"></span>OPEN_CYBER_
+        <span class="text-cyber-red">NEWS</span>
+      </a>
+      <nav class="flex items-center">
+        <a
+          href={`${base}/`}
+          class="text-cyber-dim text-xs ml-6 hover:text-cyber-red transition-colors"
+        >
+          INICIO
+        </a>
+        <a
+          href={`${base}/noticias`}
+          class="text-cyber-dim text-xs ml-6 hover:text-cyber-red transition-colors"
+        >
+          NOTICIAS
+        </a>
+        <a
+          href={`${base}/comparativas`}
+          class="text-cyber-dim text-xs ml-6 hover:text-cyber-red transition-colors"
+        >
+          COMPARATIVAS
+        </a>
+        <a
+          href={`${base}/ciber-contingencia`}
+          class="border border-cyber-red px-2.5 py-1 text-cyber-red text-xs ml-6 hover:bg-cyber-red hover:text-black transition-all"
+        >
+          CONTINGENCIA
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-6xl mx-auto my-8 px-8">
+    <slot />
+  </main>
+
+  <footer
+    class="text-center py-12 text-cyber-dark text-[0.6rem] border-t border-cyber-border"
+  >
+    <p>
+      &copy; {new Date().getFullYear()} Open Security Collective // Terminal_ID:
+      {Math.random().toString(36).substr(2, 9)}
+    </p>
+  </footer>
+</div>

@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = "/OpenCyberNews";
+---
+
+<Layout title="404 // Recurso No Encontrado">
+	<div class="flex flex-col items-center justify-center min-h-[70vh] text-center relative overflow-hidden">
+		<!-- Glitch 404 -->
+		<div class="relative mb-8">
+			<div class="text-[10rem] font-bold text-cyber-red animate-flicker relative
+						before:content-['404'] before:absolute before:top-0 before:left-0.5 before:w-full before:h-full before:animate-glitch-1
+						after:content-['404'] after:absolute after:top-0 after:-left-0.5 after:w-full after:h-full after:animate-glitch-2"
+				 style="text-shadow: 0 0 20px rgba(255, 0, 0, 0.5), 0 0 40px rgba(255, 0, 0, 0.3), 0 0 60px rgba(255, 0, 0, 0.1);">
+				404
+			</div>
+		</div>
+		
+		<!-- Terminal Box -->
+		<div class="bg-cyber-card border border-cyber-border rounded-lg w-full max-w-xl text-left overflow-hidden mb-8">
+			<div class="bg-[#151515] px-4 py-3 flex items-center gap-2 border-b border-cyber-border">
+				<span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+				<span class="w-3 h-3 rounded-full bg-cyber-yellow"></span>
+				<span class="w-3 h-3 rounded-full bg-[#27ca40]"></span>
+				<span class="ml-auto text-xs text-cyber-dim">error_log.sh</span>
+			</div>
+			<div class="p-6">
+				<p class="my-2 text-sm text-cyber-dim"><span class="text-cyber-green mr-2">$</span> locate requested_resource</p>
+				<p class="my-2 text-sm text-cyber-red">[ERROR] Recurso no encontrado en el sistema</p>
+				<p class="my-2 text-sm text-cyber-dim"><span class="text-cyber-green mr-2">$</span> status --check</p>
+				<p class="my-2 text-sm text-cyber-yellow">[WARN] La ruta solicitada no existe o fue movida</p>
+				<p class="my-2 text-sm text-cyber-dim"><span class="text-cyber-green mr-2">$</span> suggest --action</p>
+				<p class="my-2 text-sm text-[#27ca40]">[INFO] Redirigiendo a protocolos de contingencia...</p>
+			</div>
+		</div>
+
+		<!-- Actions -->
+		<div class="flex gap-4 flex-wrap justify-center">
+			<a href={`${base}/`} class="btn-terminal">
+				<span>&lt;</span> VOLVER_AL_INICIO
+			</a>
+			<a href={`${base}/noticias`} class="inline-flex items-center gap-2 px-8 py-4 bg-transparent border border-cyber-dark text-cyber-dim font-mono text-sm font-bold transition-all duration-300 hover:border-cyber-red hover:text-cyber-red">
+				VER_NOTICIAS <span>&gt;</span>
+			</a>
+		</div>
+
+		<!-- Matrix rain background -->
+		<div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-matrix-rain -z-10"></div>
+	</div>
+</Layout>
+
+<style>
+	/* Glitch effect pseudo-elements */
+	div[class*="before:content-['404']"]::before {
+		text-shadow: -2px 0 #00ffff;
+	}
+	div[class*="after:content-['404']"]::after {
+		text-shadow: 2px 0 #ff00ff;
+	}
+
+	@media (max-width: 768px) {
+		.text-\[10rem\] {
+			font-size: 5rem;
+		}
+	}
+</style>

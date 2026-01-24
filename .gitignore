@@ -1,0 +1,42 @@
+# Dependencias
+node_modules/
+
+# Build output
+dist/
+
+# Caché de Astro
+.astro/
+
+# Store de pnpm (si está local)
+.pnpm-store/
+
+# Archivos de entorno
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores e IDEs
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Caché de Vite
+node_modules/.vite/
+
+# TypeScript
+*.tsbuildinfo

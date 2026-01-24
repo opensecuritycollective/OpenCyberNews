@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('news');
+const posts = allPosts
+	.filter(p => p.data.category === 'Ciber-Contingencia')
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const base = "/OpenCyberNews";
+---
+
+<Layout title="Ciber-Contingencia // OpenCyberNews">
+	<header class="mb-12 pb-8 border-b border-cyber-red/30">
+
+		<!-- Breadcrumb -->
+		<div class="text-xs text-cyber-muted mb-6 flex items-center gap-2">
+			<a href={`${base}/`} class="text-cyber-dim hover:text-cyber-red transition-colors">INICIO</a>
+			<span class="text-cyber-dark">/</span>
+			<span class="text-cyber-red">CIBER-CONTINGENCIA</span>
+		</div>
+		
+		<!-- Title block -->
+		<div class="flex items-start gap-4 mb-4">
+			<div class="w-1 h-16 flex-shrink-0 mt-2 bg-cyber-red animate-pulse-glow"></div>
+			<div>
+				<h1 class="text-4xl font-bold text-white tracking-tight m-0">// CIBER-<span class="text-cyber-red text-glow-red">CONTINGENCIA</span></h1>
+				<p class="text-xs text-cyber-red mt-1">[{posts.length}] alertas activas en el sistema</p>
+			</div>
+		</div>
+		
+		<p class="text-cyber-dim text-sm max-w-xl leading-relaxed">
+			<strong class="text-cyber-red">PRIORIDAD MÁXIMA:</strong> Vulnerabilidades críticas, exploits activos y amenazas 
+			que requieren acción inmediata. Protocolos de respuesta y mitigación.
+		</p>
+	</header>
+
+	{posts.length > 0 ? (
+		<div class="flex flex-col gap-4 mb-12">
+			{posts.map((post, index) => (
+				<article class="border border-cyber-red/20 border-l-4 border-l-cyber-red opacity-0 animate-fade-in-up hover:translate-x-1 transition-all duration-300 group"
+						 style={`animation-delay: ${index * 0.15}s; animation-fill-mode: forwards; background: linear-gradient(90deg, rgba(255, 0, 0, 0.05), transparent);`}>
+					<a href={`${base}/news/${post.slug}`} class="flex p-6 gap-6 items-start">
+						<!-- Severity indicator -->
+						<div class="flex flex-col items-center gap-2 flex-shrink-0">
+							<div class="w-4 h-4 bg-cyber-red rounded-full animate-radar-pulse"></div>
+							<span class="text-[0.55rem] text-cyber-red font-bold" style="writing-mode: vertical-rl;">CRÍTICO</span>
+						</div>
+						
+						<!-- Content -->
+						<div class="flex-1">
+							<div class="flex justify-between items-center mb-3 text-xs">
+								<span class="text-cyber-red font-bold bg-cyber-red/10 px-2 py-0.5">ALERT-{String(index + 1).padStart(4, '0')}</span>
+								<span class="text-cyber-dim flex items-center gap-1">
+									<span class="text-cyber-red">◷</span>
+									{post.data.pubDate.toLocaleDateString('es-ES', { 
+										year: 'numeric', 
+										month: 'short', 
+										day: 'numeric' 
+									})}
+								</span>
+							</div>
+							<h2 class="text-xl font-bold text-white mb-2 leading-snug group-hover:text-cyber-red transition-colors">{post.data.title}</h2>
+							<p class="text-sm text-cyber-dim leading-relaxed mb-4">{post.data.description}</p>
+							<div class="flex justify-between items-center">
+								<div class="flex items-center gap-2">
+									<span class="w-2 h-2 bg-cyber-red rounded-full animate-blink"></span>
+									<span class="text-[0.65rem] text-cyber-red">REQUIERE_ACCIÓN</span>
+								</div>
+								<span class="text-cyber-red text-xs font-bold opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+									ACCEDER_PROTOCOLO <span class="inline-block transition-transform duration-200 group-hover:translate-x-1">»</span>
+								</span>
+							</div>
+						</div>
+					</a>
+				</article>
+			))}
+		</div>
+	) : (
+		<div class="text-center py-20 border border-cyber-green/20 bg-cyber-green/[0.02] mb-12">
+			<div class="text-6xl mb-6">🛡️</div>
+			<h2 class="text-cyber-green text-xl font-bold mb-2">SISTEMA_ESTABLE</h2>
+			<p class="text-cyber-dim text-sm mb-6">No hay alertas de contingencia activas en este momento.</p>
+			<div class="inline-flex items-center gap-2 text-cyber-green text-sm mb-8">
+				<span class="w-5 h-5 border-2 border-cyber-green rounded-full flex items-center justify-center text-xs">✓</span>
+				Todos los sistemas operativos
+			</div>
+			<br>
+			<a href={`${base}/`} class="text-cyber-green text-sm font-bold hover:text-glow-cyan transition-all">&lt; VOLVER_AL_INICIO</a>
+		</div>
+	)}
+
+	<!-- Info panel -->
+	<div class="bg-cyber-card border border-cyber-border p-8 mt-12">
+		<h3 class="text-sm font-bold text-white mb-4 pb-2 border-b border-cyber-border">¿QUÉ ES UNA CIBER-CONTINGENCIA?</h3>
+		<p class="text-cyber-dim text-sm leading-relaxed mb-6">
+			Una ciber-contingencia es un evento de seguridad crítico que requiere respuesta 
+			inmediata. Incluye vulnerabilidades zero-day, brechas de seguridad activas, 
+			ransomware y otros ataques que pueden comprometer sistemas y datos.
+		</p>
+		<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div class="border border-cyber-border p-4 hover:border-cyber-red hover:bg-cyber-red/5 transition-all">
+				<span class="text-2xl text-cyber-red font-bold block mb-2">01</span>
+				<span class="text-xs text-cyber-dim">IDENTIFICAR la amenaza</span>
+			</div>
+			<div class="border border-cyber-border p-4 hover:border-cyber-red hover:bg-cyber-red/5 transition-all">
+				<span class="text-2xl text-cyber-red font-bold block mb-2">02</span>
+				<span class="text-xs text-cyber-dim">CONTENER el incidente</span>
+			</div>
+			<div class="border border-cyber-border p-4 hover:border-cyber-red hover:bg-cyber-red/5 transition-all">
+				<span class="text-2xl text-cyber-red font-bold block mb-2">03</span>
+				<span class="text-xs text-cyber-dim">ERRADICAR la causa</span>
+			</div>
+			<div class="border border-cyber-border p-4 hover:border-cyber-red hover:bg-cyber-red/5 transition-all">
+				<span class="text-2xl text-cyber-red font-bold block mb-2">04</span>
+				<span class="text-xs text-cyber-dim">RECUPERAR sistemas</span>
+			</div>
+		</div>
+	</div>
+</Layout>

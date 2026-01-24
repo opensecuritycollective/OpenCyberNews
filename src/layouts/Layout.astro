@@ -1,151 +1,33 @@
 ---
+import MainLayout from "./MainLayout.astro";
+
 interface Props {
-	title: string;
+  title: string;
 }
+
 const { title } = Astro.props;
-// Definimos la base para no repetirla
 const base = "/OpenCyberNews";
 ---
+
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-	</head>
-	<body>
-		<header class="main-header">
-			<div class="nav-container">
-				<a href={`${base}/`} class="logo">
-					<span class="dot"></span> OPEN_CYBER_<span class="red-text">NEWS</span>
-				</a>
-				<nav>
-					<a href={`${base}/noticias`}>NOTICIAS</a>
-					<a href={`${base}/comparativas`}>COMPARATIVAS</a>
-					<a href={`${base}/ciber-contingencia`} class="urgent-link">CONTINGENCIA</a>
-				</nav>
-			</div>
-		</header>
-		<div class="scanline"></div>
-		<main class="content-wrapper">
-			<slot />
-		</main>
-		<footer class="main-footer">
-			<p>&copy; {new Date().getFullYear()} Open Security Collective // Terminal_ID: {Math.random().toString(36).substr(2, 9)}</p>
-		</footer>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <MainLayout>
+      <slot />
+    </MainLayout>
+  </body>
 </html>
 
 <style is:global>
-	:root {
-		--bg-black: #050505;
-		--card-bg: #0d0d0d;
-		--pure-red: #ff0000;
-		--text-white: #ffffff;
-		--text-dim: #666666;
-		--border: #1a1a1a;
-	}
-
-	* { box-sizing: border-box; }
-
-	body {
-		background-color: var(--bg-black) !important;
-		color: var(--text-white) !important;
-		font-family: 'JetBrains Mono', monospace;
-		margin: 0;
-		line-height: 1.6;
-		/* Fondo con puntos estilo radar */
-		background-image: radial-gradient(#111 1px, transparent 1px);
-		background-size: 20px 20px;
-	}
-
-	/* Quitamos el azul de los enlaces por defecto */
-	a {
-		text-decoration: none;
-		color: inherit;
-	}
-
-	.main-header {
-		border-bottom: 1px solid var(--border);
-		padding: 1rem 0;
-		background: rgba(0, 0, 0, 0.95);
-		backdrop-filter: blur(5px);
-		position: sticky;
-		top: 0;
-		z-index: 100;
-	}
-
-	.nav-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0 2rem;
-	}
-
-	.logo {
-		font-weight: 700;
-		font-size: 1.1rem;
-		color: var(--text-white);
-	}
-
-	.logo .dot {
-		display: inline-block;
-		width: 8px;
-		height: 8px;
-		background: var(--pure-red);
-		border-radius: 50%;
-		margin-right: 8px;
-		box-shadow: 0 0 10px var(--pure-red);
-	}
-
-	.red-text { color: var(--pure-red); }
-
-	nav a {
-		color: var(--text-dim);
-		font-size: 0.75rem;
-		margin-left: 1.5rem;
-		transition: 0.2s;
-	}
-
-	nav a:hover { color: var(--pure-red); }
-
-	.urgent-link {
-		border: 1px solid var(--pure-red);
-		padding: 4px 10px;
-		color: var(--pure-red) !important;
-	}
-
-	.content-wrapper {
-		max-width: 1200px;
-		margin: 2rem auto;
-		padding: 0 2rem;
-	}
-
-	.main-footer {
-		text-align: center;
-		padding: 3rem;
-		color: #333;
-		font-size: 0.6rem;
-		border-top: 1px solid var(--border);
-	}
-
-	.scanline {
-		width: 100%;
-		height: 100px;
-		z-index: 99;
-		background: linear-gradient(0deg, transparent 0%, rgba(255,0,0,0.02) 50%, transparent 100%);
-		position: fixed;
-		top: -100px;
-		pointer-events: none;
-		animation: scan 4s linear infinite;
-	}
-
-	@keyframes scan {
-		0% { top: -100px; }
-		100% { top: 100%; }
-	}
+  @import "../styles/global.css";
 </style>
