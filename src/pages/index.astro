@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('news');
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categories = ["Urgente", "Noticias", "Comparativas"];
+---
+
+<Layout title="OpenCyberNews // Security Feed">
+	<header class="hero">
+		<h1>INTEL_FEED: <span class="typing">SISTEMA_ACTIVO</span></h1>
+		<p class="status">[+] Monitoreando vulnerabilidades en tiempo real...</p>
+	</header>
+
+	{categories.map(cat => {
+		const categoryPosts = posts.filter(p => p.data.category === cat);
+		if (categoryPosts.length === 0) return null;
+
+		return (
+			<section class="category-block">
+				<div class="category-header">
+					<h2 class={cat === 'Urgente' ? 'blink' : ''}>// {cat}</h2>
+					<span class="count">{categoryPosts.length} ARCHIVOS</span>
+				</div>
+				
+				<div class="news-grid">
+					{categoryPosts.map(post => (
+						<article class={`news-card ${cat === 'Urgente' ? 'urgent-card' : ''}`}>
+							<a href={`/news/${post.slug}`}>
+								<div class="card-tag">{post.data.category}</div>
+								<time>{post.data.pubDate.toLocaleDateString()}</time>
+								<h3>{post.data.title}</h3>
+								<p>{post.data.description}</p>
+								<div class="card-footer">
+									<span class="arrow">></span> LEER_MAS
+								</div>
+							</a>
+						</article>
+					))}
+				</div>
+			</section>
+		);
+	})}
+</Layout>
+
+<style>
+	.hero { margin-bottom: 4rem; border-left: 2px solid var(--pure-red); padding-left: 2rem; }
+	.hero h1 { font-size: 2.5rem; margin: 0; letter-spacing: -2px; }
+	.status { color: var(--pure-red); font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8; }
+
+	.category-block { margin-bottom: 5rem; }
+	
+	.category-header {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		margin-bottom: 2rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.category-header h2 { font-size: 1.2rem; margin: 0; padding-bottom: 0.5rem; }
+	.count { color: var(--text-dim); font-size: 0.7rem; }
+
+	.news-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.news-card {
+		background: var(--card-bg);
+		border: 1px solid var(--border);
+		padding: 2rem;
+		position: relative;
+		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+	}
+
+	.news-card a { text-decoration: none; color: inherit; display: block; }
+
+	.news-card:hover {
+		border-color: var(--pure-red);
+		transform: translateY(-5px);
+		box-shadow: 0 10px 30px rgba(255, 77, 77, 0.1);
+	}
+
+	.urgent-card { border-left: 4px solid var(--pure-red); }
+
+	.card-tag {
+		font-size: 0.6rem;
+		color: var(--pure-red);
+		margin-bottom: 1rem;
+		font-weight: bold;
+	}
+
+	time { font-size: 0.7rem; color: var(--text-dim); }
+
+	h3 { margin: 1rem 0; font-size: 1.25rem; line-height: 1.2; color: var(--text-white); }
+	
+	.news-card:hover h3 { color: var(--pure-red); }
+
+	p { font-size: 0.9rem; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+	.card-footer { margin-top: 2rem; font-size: 0.7rem; font-weight: bold; color: var(--pure-red); opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
+	
+	.news-card:hover .card-footer { opacity: 1; transform: translateX(0); }
+
+	.blink { animation: blinker 1.5s linear infinite; color: var(--pure-red); }
+	@keyframes blinker { 50% { opacity: 0.3; } }
+
+	@media (max-width: 768px) {
+		.news-grid { grid-template-columns: 1fr; }
+	}
+</style>
