@@ -1,0 +1,147 @@
+---
+const base = "/OpenCyberNews";
+
+const navLinks = [
+  { href: `${base}/`, label: "INICIO" },
+  { href: `${base}/noticias`, label: "NOTICIAS" },
+  { href: `${base}/comparativas`, label: "COMPARATIVAS" },
+];
+---
+
+<header
+  class="border-b border-cyber-border py-4 bg-stone-950 backdrop-blur-sm sticky top-0 z-50"
+>
+  <div class="max-w-6xl mx-auto flex justify-between items-center px-4 md:px-8">
+    <!-- Logo -->
+    <a href={`${base}/`} class="font-bold text-lg text-white">
+      <span class="logo-dot"></span>OPEN_CYBER_
+      <span class="text-cyber-red">NEWS</span>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-cyber-dim text-xs ml-6 hover:text-cyber-red transition-colors"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href={`${base}/ciber-contingencia`}
+        class="border border-cyber-red px-2.5 py-1 text-cyber-red text-xs ml-6 hover:bg-cyber-red hover:text-black transition-all"
+      >
+        CONTINGENCIA
+      </a>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button
+      id="menu-toggle"
+      class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 group"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <span
+        class="hamburger-line w-6 h-0.5 bg-cyber-dim group-hover:bg-cyber-red transition-all duration-300 origin-center"
+      ></span>
+      <span
+        class="hamburger-line w-6 h-0.5 bg-cyber-dim group-hover:bg-cyber-red transition-all duration-300"
+      ></span>
+      <span
+        class="hamburger-line w-6 h-0.5 bg-cyber-dim group-hover:bg-cyber-red transition-all duration-300 origin-center"
+      ></span>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav
+    id="mobile-menu"
+    class="md:hidden hidden flex-col border-t border-cyber-border bg-stone-950 absolute top-full left-0 w-full"
+  >
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="text-cyber-dim text-sm px-4 py-4 border-b border-cyber-border hover:text-cyber-red hover:bg-cyber-card transition-colors"
+        >
+          <span class="text-cyber-red mr-2">›</span>
+          {link.label}
+        </a>
+      ))
+    }
+    <a
+      href={`${base}/ciber-contingencia`}
+      class="text-cyber-red text-sm px-4 py-4 border-b border-cyber-border hover:bg-cyber-red hover:text-black transition-all"
+    >
+      <span class="mr-2">!</span>
+      CONTINGENCIA
+    </a>
+  </nav>
+</header>
+
+<style>
+  /* Hamburger animation when menu is open */
+  #menu-toggle.open .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  #menu-toggle.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  #menu-toggle.open .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  #menu-toggle.open .hamburger-line {
+    @apply bg-cyber-red;
+  }
+
+  /* Mobile menu animation */
+  #mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  #mobile-menu.open {
+    display: flex;
+    max-height: 300px;
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  menuToggle?.addEventListener("click", () => {
+    const isOpen = menuToggle.classList.toggle("open");
+    mobileMenu?.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (
+      !menuToggle?.contains(e.target as Node) &&
+      !mobileMenu?.contains(e.target as Node)
+    ) {
+      menuToggle?.classList.remove("open");
+      mobileMenu?.classList.remove("open");
+      menuToggle?.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      menuToggle?.classList.remove("open");
+      mobileMenu?.classList.remove("open");
+      menuToggle?.setAttribute("aria-expanded", "false");
+    }
+  });
+</script>
