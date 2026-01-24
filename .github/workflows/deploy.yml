@@ -18,8 +18,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload with Astro
         uses: withastro/action@v3
-        # No necesitas configurar nada más, la acción detecta Astro automáticamente
-
+        with:
+          package-manager: npm # <--- Agregamos esto para que no falle
+          
   deploy:
     needs: build
     runs-on: ubuntu-latest
