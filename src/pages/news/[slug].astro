@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Generar las rutas para cada archivo Markdown
+export async function getStaticPaths() {
+  const newsEntries = await getCollection('news');
+  return newsEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+// 2. Obtener el contenido de la noticia
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={`${entry.data.title} // OpenCyberNews`}>
+  <article class="post-container">
+    <header class="post-header">
+      <div class="meta">
+        <span class="status-indicator"></span>
+        ID: {entry.slug.toUpperCase()} // CLASIFICACIÓN: {entry.data.category.toUpperCase()}
+      </div>
+      <time>{entry.data.pubDate.toLocaleDateString()}</time>
+      <h1>{entry.data.title}</h1>
+      <p class="description">{entry.data.description}</p>
+    </header>
+
+    <hr class="divider" />
+
+    <div class="markdown-content">
+      <Content />
+    </div>
+
+    <footer class="post-footer">
+      <a href="/" class="back-link">_ VOLVER_AL_FEED</a>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .post-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(18, 18, 18, 0.5);
+    padding: 3rem;
+    border: 1px solid #222;
+  }
+
+  .post-header { margin-bottom: 2rem; }
+
+  .meta {
+    font-size: 0.7rem;
+    color: #ff4d4d;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ff4d4d;
+    box-shadow: 0 0 8px #ff4d4d;
+  }
+
+  h1 { font-size: 2.5rem; margin: 0.5rem 0; color: #fff; line-height: 1.1; }
+  
+  .description {
+    font-size: 1.1rem;
+    color: #888;
+    border-left: 2px solid #444;
+    padding-left: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .divider { border: 0; border-top: 1px solid #222; margin: 3rem 0; }
+
+  /* Estilos para el contenido Markdown */
+  .markdown-content {
+    line-height: 1.8;
+    color: #ccc;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .markdown-content :global(h2) { color: #ff4d4d; margin-top: 2rem; border-bottom: 1px solid #222; }
+  .markdown-content :global(p) { margin-bottom: 1.5rem; }
+  .markdown-content :global(code) { background: #222; padding: 2px 5px; color: #ff4d4d; }
+  
+  .post-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #222; }
+  
+  .back-link {
+    text-decoration: none;
+    color: #ff4d4d;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .back-link:hover { text-shadow: 0 0 10px #ff4d4d; }
+</style>
