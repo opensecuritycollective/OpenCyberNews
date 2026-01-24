@@ -2,52 +2,209 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
+// 1. Cargamos las noticias de la colección 'news'
 const allPosts = await getCollection('news');
+
+// 2. Ordenamos por fecha (de más reciente a más antigua)
 const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Lista actualizada de categorías
+// 3. Definimos las categorías exactas (deben coincidir con el config.ts)
 const categories = ["Ciber-Contingencia", "Noticias", "Comparativas"];
+
+// 4. Definimos la base para evitar el error 404 en los enlaces
+const base = "/OpenCyberNews";
 ---
 
-<Layout title="OpenCyberNews // Security Feed">
+<Layout title="OpenCyberNews // Security Intelligence Feed">
 	<header class="hero">
-		<h1>INTEL_FEED: <span class="typing">SISTEMA_ACTIVO</span></h1>
-		<p class="status">[+] Monitoreando vulnerabilidades en tiempo real...</p>
+		<div class="terminal-header">
+			<span class="status-indicator"></span>
+			<span class="system-text">ESTADO: SISTEMA_ACTIVO // SECTOR: PUBLICO</span>
+		</div>
+		<h1>INTEL_<span class="red-text">FEED</span></h1>
+		<p class="glitch-text">[+] Monitoreando amenazas y comparativas técnicas...</p>
 	</header>
 
-	{categories.map(cat => {
-		const categoryPosts = posts.filter(p => p.data.category === cat);
-		if (categoryPosts.length === 0) return null;
+	<div class="content-grid">
+		{categories.map(cat => {
+			const categoryPosts = posts.filter(p => p.data.category === cat);
+			if (categoryPosts.length === 0) return null;
 
-		return (
-			<section class="category-block">
-				<div class="category-header">
-					<h2 class={cat === 'Ciber-Contingencia' ? 'blink' : ''}>// {cat}</h2>
-					<span class="count">{categoryPosts.length} ARCHIVOS</span>
-				</div>
-				
-				<div class="news-grid">
-					{categoryPosts.map(post => (
-						<article class={`news-card ${cat === 'Ciber-Contingencia' ? 'urgent-card' : ''}`}>
-                            <a href={`/OpenCyberNews/news/${post.slug}`}>
-								<div class="card-tag">{post.data.category}</div>
-								<time>{post.data.pubDate.toLocaleDateString()}</time>
-								<h3>{post.data.title}</h3>
-								<p>{post.data.description}</p>
-								<div class="card-footer">
-									<span class="arrow">></span> LEER_REPORTE_
-								</div>
-							</a>
-						</article>
-					))}
-				</div>
-			</section>
-		);
-	})}
+			return (
+				<section class="category-block">
+					<div class="category-label">
+						<h2 class={cat === 'Ciber-Contingencia' ? 'urgent-title' : ''}>
+							// {cat.toUpperCase()}
+						</h2>
+						<span class="file-count">{categoryPosts.length} OBJ(S)</span>
+					</div>
+					
+					<div class="news-list">
+						{categoryPosts.map(post => (
+							<article class={`news-item ${cat === 'Ciber-Contingencia' ? 'urgent-item' : ''}`}>
+								<a href={`${base}/news/${post.slug}`} class="card-link">
+									<div class="card-meta">
+										<span class="date">{post.data.pubDate.toLocaleDateString()}</span>
+										<span class="slug">REF: {post.slug.split('/').pop()?.toUpperCase()}</span>
+									</div>
+									<h3>{post.data.title}</h3>
+									<p>{post.data.description}</p>
+									<div class="card-footer">
+										<span class="arrow">></span> ACCEDER_AL_REPORTE_
+									</div>
+								</a>
+							</article>
+						))}
+					</div>
+				</section>
+			);
+		})}
+	</div>
 </Layout>
 
 <style>
-    /* ... (El CSS que ya tenías antes) ... */
-    .urgent-card { border-left: 4px solid var(--pure-red); box-shadow: inset 5px 0 15px rgba(255, 0, 0, 0.1); }
-    .blink { animation: blinker 1.5s linear infinite; color: var(--pure-red); text-shadow: 0 0 10px var(--pure-red); }
+	/* Contenedor Principal */
+	.hero {
+		margin-bottom: 4rem;
+		border-left: 2px solid #ff0000;
+		padding-left: 1.5rem;
+	}
+
+	.terminal-header {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 0.5rem;
+	}
+
+	.status-indicator {
+		width: 8px;
+		height: 8px;
+		background: #00ff00;
+		border-radius: 50%;
+		box-shadow: 0 0 10px #00ff00;
+	}
+
+	.system-text {
+		font-size: 0.65rem;
+		color: #444;
+		letter-spacing: 1px;
+	}
+
+	h1 {
+		font-size: 3rem;
+		margin: 0;
+		letter-spacing: -2px;
+		color: #fff;
+	}
+
+	.red-text { color: #ff0000; text-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+
+	.glitch-text {
+		color: #888;
+		font-size: 0.9rem;
+		margin-top: 0.5rem;
+	}
+
+	/* Categorías */
+	.category-block {
+		margin-bottom: 4rem;
+	}
+
+	.category-label {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+		border-bottom: 1px solid #1a1a1a;
+	}
+
+	.category-label h2 {
+		font-size: 1rem;
+		margin: 0;
+		padding-bottom: 0.5rem;
+		color: #fff;
+	}
+
+	.urgent-title {
+		color: #ff0000 !important;
+		animation: blink 2s infinite;
+	}
+
+	.file-count { font-size: 0.6rem; color: #444; }
+
+	/* Lista de Noticias */
+	.news-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.news-item {
+		background: #0a0a0a;
+		border: 1px solid #1a1a1a;
+		transition: all 0.3s ease;
+	}
+
+	.news-item:hover {
+		border-color: #ff0000;
+		background: #0f0f0f;
+		transform: translateY(-3px);
+	}
+
+	.urgent-item {
+		border-left: 3px solid #ff0000;
+	}
+
+	.card-link {
+		padding: 1.5rem;
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.card-meta {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.65rem;
+		color: #555;
+		margin-bottom: 1rem;
+	}
+
+	h3 {
+		color: #fff;
+		margin: 0 0 0.75rem 0;
+		font-size: 1.2rem;
+		line-height: 1.3;
+	}
+
+	.news-item:hover h3 { color: #ff0000; }
+
+	p {
+		font-size: 0.85rem;
+		color: #777;
+		line-height: 1.5;
+		margin-bottom: 1.5rem;
+	}
+
+	.card-footer {
+		font-size: 0.7rem;
+		color: #ff0000;
+		font-weight: bold;
+		opacity: 0;
+		transition: 0.3s;
+	}
+
+	.news-item:hover .card-footer {
+		opacity: 1;
+	}
+
+	@keyframes blink {
+		50% { opacity: 0.5; }
+	}
+
+	@media (max-width: 768px) {
+		.news-list { grid-template-columns: 1fr; }
+		h1 { font-size: 2rem; }
+	}
 </style>
