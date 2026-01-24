@@ -1,0 +1,33 @@
+:root {
+  /* Paleta Dark Mode */
+  --bg-dark: #0a0a0a;       /* Negro profundo */
+  --bg-card: #1a1a1a;      /* Gris muy oscuro para tarjetas */
+  --accent-red: #ff0000;    /* Rojo puro (puedes usar #e63946 para algo más suave) */
+  --text-primary: #ffffff;  /* Blanco */
+  --text-secondary: #a0a0a0; /* Gris claro para descripciones */
+  --border-color: #333333;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Estilo para los títulos de sección (Noticias, Urgente, etc.) */
+h2.section-title {
+  border-left: 4px solid var(--accent-red);
+  padding-left: 1rem;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+/* Enlaces y botones */
+a {
+  color: var(--accent-red);
+  text-decoration: none;
+}
+
+a:hover {
+  filter: brightness(1.2);
+}
